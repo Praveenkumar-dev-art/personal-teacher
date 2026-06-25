@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <style>
+    /* KEYFRAME ANIMATIONS */
+
+    /* Black Hole Core: Subtle pulsing to hint at its dynamic nature */
+    @keyframes bhPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.005); opacity: 0.95; } /* Slight inward pulse */
+    }
+    .black-hole-core {
+      animation: bhPulse 4s ease-in-out infinite;
+      transform-origin: 400px 300px; /* Center of the black hole */
+    }
+
+    /* Event Horizon: Subtle shimmering effect */
+    @keyframes eventHorizonGlow {
+      0%, 100% { stroke: #222; stroke-width: 2; }
+      50% { stroke: #333; stroke-width: 3; }
+    }
+    .event-horizon {
+      animation: eventHorizonGlow 5s ease-in-out infinite;
+    }
+
+    /* Accretion Disk Flow: Uses stroke-dashoffset to create a continuous flow effect on paths */
+    @keyframes diskFlow {
+      to { stroke-dashoffset: -1000; } /* Negative offset for clockwise flow */
+    }
+    .accretion-disk-path {
+      animation: diskFlow var(--disk-speed) linear infinite;
+    }
+
+    /* Infalling Particle Animation: Simulates matter and light spiraling into the black hole */
+    /* Particles start at the black hole's center (cx=400, cy=300) and are animated
+       to translate outwards to an initial position, then spiral inwards, scaling down
+       and fading out as they approach and cross the event horizon. */
+    @keyframes particleInfall {
+        0% {
+            transform: translate(var(--initial-offset-x), var(--initial-offset-y)) rotate(0deg);
+            opacity: 1;
+        }
+        30% { /* Mid-spiral point 1 */
+            transform: translate(calc(var(--initial-offset-x) * 0.7), calc(var(--initial-offset-y) * 0.7)) rotate(180deg);
+            opacity: 1;
+        }
+        60% { /* Mid-spiral point 2, closer to the event horizon */
+            transform: translate(calc(var(--initial-offset-x) * 0.3), calc(var(--initial-offset-y) * 0.3)) rotate(360deg);
+            opacity: 0.8;
+        }
+        90% { /* Just before disappearing into the black hole */
+            transform: translate(0, 0) rotate(540deg) scale(0.5); /* Scale down before final disappearance */
+            opacity: 0.2;
+        }
+        100% { /* Inside the event horizon / fully disappeared */
+            transform: translate(0, 0) rotate(720deg) scale(0);
+            opacity: 0;
+            display: none; /* Ensures the element is completely gone */
+        }
+    }
+
+    .infalling-particle {
+        animation-name: particleInfall;
+        animation-timing-function: cubic-bezier(0.5, 0, 0.5, 1); /* Accelerates towards the center, mimicking gravity */
+        animation-iteration-count: infinite;
+        animation-duration: var(--duration);
+        animation-delay: var(--delay);
+        transform-origin: 400px 300px; /* All transforms (translate, rotate) are relative to the black hole's center */
+    }
+
+    /* Styling for different particle types */
+    .star-particle {
+        fill: #FFD700; /* Gold color for stellar matter */
+    }
+    .light-particle {
+        fill: #FFFFFF; /* White for light */
+        filter: drop-shadow(0 0 3px #FFF); /* Subtle glow effect for light */
+    }
+
+  </style>
+
+  <!-- Background: Deep Space -->
+  <rect x="0" y="0" width="800" height="600" fill="#0A0A1A"/>
+
+  <!-- Accretion Disk Group -->
+  <!-- This group contains multiple concentric paths that simulate the spiraling disk of matter
+       around the black hole. The 'stroke-dashoffset' animation on each path creates a continuous
+       flow. Inner paths have faster animation speeds to suggest higher orbital velocities due to stronger gravity. -->
+  <g transform-origin="400 300">
+    <path id="diskPath1" d="M 550 300 A 150 150 0 1 0 250 300 A 150 150 0 1 0 550 300"
+          fill="none" stroke="#FFA500" stroke-width="2"
+          stroke-dasharray="20 10" opacity="0.6" class="accretion-disk-path" style="--disk-speed: 15s;"/>
+    <path id="diskPath2" d="M 520 300 A 120 120 0 1 0 280 300 A 120 120 0 1 0 520 300"
+          fill="none" stroke="#FFD700" stroke-width="3"
+          stroke-dasharray="15 7" opacity="0.7" class="accretion-disk-path" style="--disk-speed: 10s;"/>
+    <path id="diskPath3" d="M 490 300 A 90 90 0 1 0 310 300 A 90 90 0 1 0 490 300"
+          fill="none" stroke="#FF8C00" stroke-width="4"
+          stroke-dasharray="10 5" opacity="0.8" class="accretion-disk-path" style="--disk-speed: 7s;"/>
+  </g>
+
+  <!-- Black Hole Core: The central singularity with extreme gravity -->
+  <circle cx="400" cy="300" r="60" fill="black" class="black-hole-core"/>
+
+  <!-- Event Horizon: The point of no return. Represented by subtle rings with a shimmer. -->
+  <circle cx="400" cy="300" r="70" fill="none" stroke="#222" stroke-width="2" class="event-horizon"/>
+  <circle cx="400" cy="300" r="72" fill="none" stroke="#111" stroke-width="1" />
+
+  <!-- Infalling Particles: Stars/Matter and Light -->
+  <!-- Multiple animated circles represent matter and light being drawn into the black hole.
+       Each particle has unique initial offset, duration, and delay for varied, dynamic motion.
+       Their disappearance into the center visually conveys the inescapable gravitational pull. -->
+  <g class="infalling-particles-container">
+    <!-- Star particles (larger, yellow/orange) -->
+    <circle cx="400" cy="300" r="4" class="infalling-particle star-particle" style="--duration: 10s; --delay: 0s; --initial-offset-x: -250px; --initial-offset-y: -150px;"/>
+    <circle cx="400" cy="300" r="3" class="infalling-particle star-particle" style="--duration: 12s; --delay: 1s; --initial-offset-x: 280px; --initial-offset-y: -100px;"/>
+    <circle cx="400" cy="300" r="5" class="infalling-particle star-particle" style="--duration: 9s; --delay: 2s; --initial-offset-x: -180px; --initial-offset-y: 200px;"/>
+    <circle cx="400" cy="300" r="2" class="infalling-particle star-particle" style="--duration: 11s; --delay: 3s; --initial-offset-x: 150px; --initial-offset-y: 250px;"/>
+    <circle cx="400" cy="300" r="4" class="infalling-particle star-particle" style="--duration: 10.5s; --delay: 4s; --initial-offset-x: -300px; --initial-offset-y: 50px;"/>
+    <circle cx="400" cy="300" r="3" class="infalling-particle star-particle" style="--duration: 9.5s; --delay: 5s; --initial-offset-x: 200px; --initial-offset-y: -220px;"/>
+
+    <!-- Light particles (smaller, white, with glow, generally faster) -->
+    <circle cx="400" cy="300" r="1.5" class="infalling-particle light-particle" style="--duration: 6s; --delay: 0.5s; --initial-offset-x: -220px; --initial-offset-y: -80px;"/>
+    <circle cx="400" cy="300" r="1.5" class="infalling-particle light-particle" style="--duration: 7s; --delay: 1.5s; --initial-offset-x: 190px; --initial-offset-y: 120px;"/>
+    <circle cx="400" cy="300" r="1.5" class="infalling-particle light-particle" style="--duration: 5.5s; --delay: 2.5s; --initial-offset-x: -150px; --initial-offset-y: 100px;"/>
+    <circle cx="400" cy="300" r="1.5" class="infalling-particle light-particle" style="--duration: 6.5s; --delay: 3.5s; --initial-offset-x: 240px; --initial-offset-y: -90px;"/>
+    <circle cx="400" cy="300" r="1.5" class="infalling-particle light-particle" style="--duration: 5s; --delay: 4.5s; --initial-offset-x: -100px; --initial-offset-y: 150px;"/>
+  </g>
+
+</svg>
